@@ -1,0 +1,205 @@
+﻿@page
+@model FARegistryWEB.Pages.ShowDetailsModel
+
+@{
+    ViewData["Title"] = "Authorization Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    ViewData["GoogleAPIKey"] = "AIzaSyBLbtWl0JQbvZouxzTmg9C_yrXAmBvHGqE";
+}
+
+
+<style>
+    #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+<h4> Authorization Details</h4>
+<div class="col-md-9">
+    <div id="Map" class="container row" style="width:60vw; height: 50vw;"></div>
+    <script type="text/javascript">
+
+
+                var lastOpenedInfoWindow;
+                function closeLastOpenedInfoWindow() {
+                    if (lastOpenedInfoWindow) {
+                        lastOpenedInfoWindow.close();
+                    }
+                }
+            function initMap() {
+                registryrecord = @Json.Serialize(Model.RegistryRecord);
+
+
+
+
+                    var lat = parseFloat(registryrecord.latitudeLatitude);
+                    var lng = parseFloat(registryrecord.longitudeLongitude);
+                    var title = registryrecord.titleTitre;
+                    var id = registryrecord.id;
+
+                    var projectDescription = registryrecord.projectDescDescduprojet;
+
+
+                    
+                    var map = new google.maps.Map(document.getElementById("Map"), {
+                        center: new google.maps.LatLng(lat, lng),
+                        mapTypeId: google.maps.MapTypeId.TERRAIN,
+                        zoom: 15
+                    })
+
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(lat, lng),
+                        map: map,
+                        title: title
+
+                    });
+
+           }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@(ViewData["GoogleAPIKey"])&callback=initMap" async defer></script>
+</div>
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.PATHNoNoduSAPH)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.PATHNoNoduSAPH)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.TitleTitre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.TitleTitre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ProvinceTerritory)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ProvinceTerritory)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.LatitudeLatitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.LatitudeLatitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.LongitudeLongitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.LongitudeLongitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.WatershedNomduBassin)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.WatershedNomduBassin)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.PrimaryWork)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.PrimaryWork)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.Status)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.Status)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ProponentOrganization)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ProponentOrganization)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.RegistryContactduRegistre)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.RegistryContactduRegistre)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ContactURL)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ContactURL)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.AuthDateDatedeauth)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.AuthDateDatedeauth)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.EffectiveDateDateenvigueur)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.EffectiveDateDateenvigueur)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ExpiryDateDatedexpire)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ExpiryDateDatedexpire)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.AuthorizationType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.AuthorizationType)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ProjectDescDescduprojet)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ProjectDescDescduprojet)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.LocationDescAutreinfogeo)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.LocationDescAutreinfogeo)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.FederalStakeholders)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.FederalStakeholders)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ProvincialStakeholders)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ProvincialStakeholders)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.ProgramActivity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.ProgramActivity)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RegistryRecord.REGION)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RegistryRecord.REGION)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
+</div>

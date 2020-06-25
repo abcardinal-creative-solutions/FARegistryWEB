@@ -1,0 +1,162 @@
+﻿@page
+@model TestPageModel
+@{
+    ViewData["GoogleAPIKey"] = "AIzaSyBLbtWl0JQbvZouxzTmg9C_yrXAmBvHGqE";
+    ViewData["Title"] = "TestPage";
+    Layout = "~/Pages/Shared/_LayoutNew.cshtml";
+}
+
+
+<div class="container row p-0 m-0">
+
+    <div class="col-md-9">
+
+        @if (Model.ShowMap == true)
+        {
+
+            <div id="Map" class="container row" style="width:100vw; height: 40vw;"></div>
+
+            <script type="text/javascript">
+
+
+                var lastOpenedInfoWindow;
+                function closeLastOpenedInfoWindow() {
+                    if (lastOpenedInfoWindow) {
+                        lastOpenedInfoWindow.close();
+                    }
+                }
+            function initMap() {
+                registrydata = @Json.Serialize(Model.RegistryRecords);
+
+
+                var map = new google.maps.Map(document.getElementById("Map"), {
+                    center: new google.maps.LatLng(59, -97),
+                    zoom: 4,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN
+                });
+
+                for (var i = 0; i < registrydata.length; i++) {
+
+                    var registryrecord = registrydata[i];
+                    var lat = parseFloat(registryrecord.latitudeLatitude);
+                    var lng = parseFloat(registryrecord.longitudeLongitude);
+                    var title = registryrecord.titleTitre;
+                    var id = registryrecord.id;
+
+                    var projectDescription = registryrecord.projectDescDescduprojet;
+
+
+                    var contentString = '<div id="content">' +
+                        '<div id="siteNotice">' +
+                        '</div>' +
+                        '<h4 id="firstHeading" class="firstHeading"><a href=ShowDetails?id=' + id + '>' + title + '</a></h4>' +
+
+                        '<div id="bodyContent">' +
+                        '<p><b>' + projectDescription +'</p>' +
+
+                        '</div>' +
+                        '</div>';
+
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(lat, lng),
+                        map: map,
+                        title: title
+
+
+                    });
+
+                    var infowindow = new google.maps.InfoWindow({
+                        content: contentString
+                    });
+
+
+                    google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+                        return function () {
+                            closeLastOpenedInfoWindow();
+                            infowindow.setContent(content);
+                            infowindow.open(map, marker);
+                            lastOpenedInfoWindow = infowindow;
+                        };
+                    })(marker, contentString, infowindow));
+
+
+
+                }
+
+           }
+            </script>
+
+            <script src="https://maps.googleapis.com/maps/api/js?key=@(ViewData["GoogleAPIKey"])&callback=initMap" async defer></script>
+        }
+    </div>
+
+
+    <div class="col-12 border p-3 mt-3">
+        <form asp-page="./Index" method="get">
+
+
+            <b>Search:</b><input asp-for="SearchString" placeholder="Search by keyword(s)" class="form-control" /><input type="submit" value="Search" class="btn btn-primary" />  Show Map: <input asp-for="ShowMap" /> <br />
+            <br />
+
+            @if (Model.RegistryRecords.Count() > 0)
+            {
+
+
+                @foreach (var item in Model.RegistryRecords)
+                {
+
+                    <h5><a asp-page="ShowDetails" asp-route-id="@item.Id">@Html.DisplayFor(m => item.TitleTitre)</a></h5>
+
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.PATHNoNoduSAPH)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.PATHNoNoduSAPH)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.LocationDescAutreinfogeo)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.LocationDescAutreinfogeo)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.WatershedNomduBassin)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.WatershedNomduBassin)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.PrimaryWork)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.PrimaryWork)
+                        </dd>
+
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.AuthDateDatedeauth)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.AuthDateDatedeauth)
+                        </dd>
+
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(m => item.AuthorizationType)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.AuthorizationType)
+                        </dd>
+
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(m => item.ProjectDescDescduprojet)
+                        </dd>
+                    </dl>
+                }
+            }
+            else
+            {
+                <p>No Registry Data Available</p>
+            }
+        </form>
+    </div>
+</div>
