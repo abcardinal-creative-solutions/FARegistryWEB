@@ -6,19 +6,6 @@
     Layout = "~/Pages/Shared/_Layout.cshtml";
     ViewData["GoogleAPIKey"] = "AIzaSyBLbtWl0JQbvZouxzTmg9C_yrXAmBvHGqE";
 }
-
-
-<style>
-    #map {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100%;
-    }
-</style>
-<h4> Authorization Details</h4>
-<div class="col-md-9">
-    <div id="Map" class="container row" style="width:60vw; height: 50vw;"></div>
     <script type="text/javascript">
 
 
@@ -59,9 +46,13 @@
            }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=@(ViewData["GoogleAPIKey"])&callback=initMap" async defer></script>
-</div>
-<div>
+    
 
+
+<div class="col-sm-7 float-left">
+
+    <h4> Authorization Details</h4>   
+    
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -199,7 +190,7 @@
         </dd>
 
     </dl>
-</div>
+</div><div id="Map" class="float-right" style="width:30vw; height: 25vw;"></div>
 <div>
     <a href="javascript:void(0);" onclick="history.go(-1);">Back to List</a>
 </div>

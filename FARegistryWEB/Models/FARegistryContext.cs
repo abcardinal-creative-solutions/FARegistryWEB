@@ -1,6 +1,5 @@
 ﻿using FARegistryWEB.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace FARegistryWEB.Data
 {
@@ -8,9 +7,9 @@ namespace FARegistryWEB.Data
     {
 
 
-        public RegistryContext(DbContextOptions<RegistryContext> options ) : base(options)
+        public RegistryContext(DbContextOptions<RegistryContext> options) : base(options)
         {
-            
+
         }
         public DbSet<RegistryRecord> RegistryRecords { get; set; }
     }

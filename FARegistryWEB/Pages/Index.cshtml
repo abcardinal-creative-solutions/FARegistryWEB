@@ -5,18 +5,7 @@
     ViewData["Title"] = "Home";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-
-
-<div class="container row p-0 m-0">
-    
-    <div class="col-md-9">
-
-        @if (Model.ShowMap == true)
-        {
-
-        <div id="Map" class ="container row" style="width:100vw; height: 40vw;"></div>
-
-            <script type="text/javascript">
+<script type="text/javascript">
 
 
                 var lastOpenedInfoWindow;
@@ -26,20 +15,28 @@
                     }
                 }
             function initMap() {
-                registrydata = @Json.Serialize(Model.RegistryRecords);
+                var registrydata = @Json.Serialize(Model.RegistryRecords);
+               
+                var lat = 59;
+                var lng = -79;
+                var zoom = 4;
+                if (registrydata.length > 0) {
 
-
+                    var lat = parseFloat(registrydata[0].latitudeLatitude);
+                    var lng = parseFloat(registrydata[0].longitudeLongitude);
+                    var zoom = 4;
+                }
                 var map = new google.maps.Map(document.getElementById("Map"), {
-                    center: new google.maps.LatLng(59, -97), 
-                    zoom: 4,
+                    center: new google.maps.LatLng(lat, lng),
+                    zoom: zoom,
                     mapTypeId: google.maps.MapTypeId.TERRAIN
                 });
 
                 for (var i = 0; i < registrydata.length; i++) {
 
                     var registryrecord = registrydata[i];
-                    var lat = parseFloat(registryrecord.latitudeLatitude);
-                    var lng = parseFloat(registryrecord.longitudeLongitude);
+                    lat = parseFloat(registryrecord.latitudeLatitude);
+                    lng = parseFloat(registryrecord.longitudeLongitude);
                     var title = registryrecord.titleTitre;
                     var id = registryrecord.id;
 
@@ -61,7 +58,7 @@
                         position: new google.maps.LatLng(lat, lng),
                         map: map,
                         title: title
-                        
+
 
                     });
 
@@ -83,20 +80,129 @@
 
                 }
 
-           }
-            </script>
-     
-            <script src="https://maps.googleapis.com/maps/api/js?key=@(ViewData["GoogleAPIKey"])&callback=initMap" async defer></script>
+            }
+                function HideMap() {
+
+                    var x = document.getElementById("Map");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                        replaceButtonText("HideMap", "Hide Map");
+                    } else {
+                        x.style.display = "none";
+                        replaceButtonText("HideMap", "Show Map");
+
+                    }
+
+                }
+                function HideFilter() {
+                    var x = document.getElementById("Filter");
+                    if (x.style.display === "none") {
+                        x.style.display = "block";
+                        replaceButtonText("btnFilter", "Hide Filter");
+                    } else {
+                        x.style.display = "none";
+                        replaceButtonText("btnFilter", "Show Filter");
+
+                    }
+                }
+    function replaceButtonText(buttonId, text) {
+        if (document.getElementById) {
+            var button = document.getElementById(buttonId);
+            if (button) {
+                if (button.childNodes[0]) {
+                    button.childNodes[0].nodeValue = text;
+                }
+                else if (button.value) {
+                    button.value = text;
+                }
+                else if (button.innerHTML) {
+                    button.innerHTML = text;
+                }
+            }
         }
+    }
+                 
+   
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@(ViewData["GoogleAPIKey"])&callback=initMap" async defer></script>
+
+
+
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h1 class="card-title">Search Registry</h1>
+    </div>
+    <form method="get">
+        <div class="card-body">
+            <div class="form-group">
+                <input class="form-control" asp-for="SearchString" type="text" />
+            </div>
+        </div>
+        <div class="card-footer">
+            <button id="btnSearch" asp-route="Index" class="btn btn-sm btn-primary" type="submit">Search</button>
+
+            <button id="btnReset" class="btn btn-sm btn-primary">Reset</button>
+            <button id="btnFilter" class="btn btn-sm btn-primary" type="button" onclick="HideFilter()">Hide Filter</button>
+
+            <button id="btnHideMap" class="btn btn-sm btn-primary" type="button" onclick="HideMap()">Hide Map</button> <b>Results: <r>@Model.RegistryRecords.Count()</r></b>
+        </div>
+        </form>
+</div>
+
+    <div id="Filter" class="wrapper border col-sm-2 float-left">
+
+        <!-- Sidebar -->
+        <nav id="sidebar">
+
+            <ul class="list-group">
+
+                <li class="active">
+                    <a href="#Province" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Province</a>
+                    <ul class="collapse list-group-item" id="Province">
+                       
+
+                        <li class="nav-item">
+                            <a href="#">Ontario (161)</a>
+                        </li>
+
+                        <li class="nav-item>">
+                            <a href="#">Home 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">Home 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">Home 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li class="nav-item">
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </nav>
     </div>
 
-
-    <div class="col-12 border p-3 mt-3">
-        <form asp-page="./Index" method="get">
-
-
-            <b>Search:</b><input asp-for="SearchString" placeholder="Search by keyword(s)" class="form-control" /><input type="submit" value="Search" class="btn btn-primary" />  Show Map: <input asp-for="ShowMap"  /> <br />
-            <br />
+    <div class="container-fluid col-10 border float-right">
+        <div id="Map" class="border"style="width:100%; height: 50vw;"></div>
+        <div class="container-fluid border">
 
             @if (Model.RegistryRecords.Count() > 0)
             {
@@ -104,8 +210,8 @@
 
                 @foreach (var item in Model.RegistryRecords)
                 {
-
-                <h5><a asp-page="ShowDetails" asp-route-id="@item.Id">@Html.DisplayFor(m => item.TitleTitre)</a></h5>
+           
+                    <h5><a asp-page="ShowDetails" asp-route-id="@item.Id">@Html.DisplayFor(m => item.TitleTitre)</a></h5>
 
                     <dl class="row">
                         <dt class="col-sm-2">
@@ -157,6 +263,7 @@
             {
                 <p>No Registry Data Available</p>
             }
-        </form>
+
+        </div>
     </div>
-</div>
+
